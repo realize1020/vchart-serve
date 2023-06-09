@@ -9,3 +9,10 @@ spring:
     url: jdbc:mysql://localhost:3306/demo?characterEncoding=utf8&allowMultiQueries=true&useSSL=false&useUnicode=true&useOldAliasMetadataBehavior=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
+
+
+
+rsa:
+  key:
+    pubKeyFile: D:\111\id_key_rsa.pub
+    priKeyFile: D:\111\id_key_rsa
