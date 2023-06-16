@@ -24,17 +24,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private TokenManager tokenManager;
-    //private RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
     private DefaultPasswordEncoder defaultPasswordEncoder;
     private UserDetailsService userDetailsService;
 
     @Autowired
     public TokenWebSecurityConfig(UserDetailsService userDetailsService, DefaultPasswordEncoder defaultPasswordEncoder,
-                                  TokenManager tokenManager) {
+                                  TokenManager tokenManager,RedisTemplate redisTemplate) {
         this.userDetailsService = userDetailsService;
         this.defaultPasswordEncoder = defaultPasswordEncoder;
         this.tokenManager = tokenManager;
-        //this.redisTemplate = redisTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -52,7 +52,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")//退出路径
                 .addLogoutHandler(new TokenLogoutHandler(tokenManager)).and()
-                .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager))
+                .addFilter(new TokenLoginFilter(authenticationManager(),tokenManager,redisTemplate))
                 .addFilter(new TokenAuthFilter(authenticationManager(), tokenManager)).httpBasic();
     }
 

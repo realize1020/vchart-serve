@@ -6,6 +6,7 @@ import com.example.demo.utils.R;
 import com.example.demo.utils.ResponseUtil;
 import com.example.demo.utils.TokenManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,13 +24,13 @@ import java.util.ArrayList;
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private TokenManager tokenManager;
-    //private RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
     private AuthenticationManager authenticationManager;
 
-    public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager) {
+    public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager,RedisTemplate redisTemplate) {
         this.authenticationManager = authenticationManager;
         this.tokenManager = tokenManager;
-        //this.redisTemplate = redisTemplate;
+        this.redisTemplate = redisTemplate;
         this.setPostOnly(false);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login","POST"));
     }
@@ -58,12 +59,14 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //SecurityUser user = (SecurityUser)authResult.getPrincipal();//换下面
         UserPojo user = (UserPojo)authResult.getPrincipal();
         //根据用户名生成token
-        //String token = tokenManager.createToken(user.getCurrentUserInfo().getUsername());
+        String token = tokenManager.createToken(user.getUsername());
         //把用户名称和用户权限列表放到redis
-        //redisTemplate.opsForValue().set(user.getCurrentUserInfo().getUsername(),user.getPermissionValueList());
+        //redisTemplate.opsForValue().set(user.getUsername(),user.getPermissionValueList());
+        //把用户名和密码放入到redis里
+        redisTemplate.opsForValue().set(user.getUsername(),user.getPassword());
         //返回token
-        //ResponseUtil.out(response, R.ok().data("token",token));
-        ResponseUtil.out(response, R.ok());
+        ResponseUtil.out(response, R.ok().data("token",token));
+        //ResponseUtil.out(response, R.ok());
     }
 
     //3 认证失败调用的方法
