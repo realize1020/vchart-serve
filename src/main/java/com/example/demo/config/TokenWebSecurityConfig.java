@@ -49,6 +49,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new UnauthorizedEntryPoint())//没有权限访问
                 .and().csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/code/verifyCode").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")//退出路径
                 .addLogoutHandler(new TokenLogoutHandler(tokenManager)).and()
