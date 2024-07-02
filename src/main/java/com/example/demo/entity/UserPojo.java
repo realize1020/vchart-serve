@@ -34,6 +34,11 @@ public class UserPojo implements UserDetails {
 
     private String token;
 
+    private String verifyCode;
+
+    private String uuid;
+
+
     //private Integer status;
 
     //private List<RolePojo> roles;
