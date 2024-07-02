@@ -8,6 +8,7 @@ import com.example.demo.utils.TokenManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,6 +27,10 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     private TokenManager tokenManager;
     private RedisTemplate redisTemplate;
     private AuthenticationManager authenticationManager;
+    //验证码存入redis的前缀
+    private static final String VERIFYCODE_PREFIX = "verifyCode:";
+    private String uuid;
+    private String verifyCode;
 
     public TokenLoginFilter(AuthenticationManager authenticationManager, TokenManager tokenManager,RedisTemplate redisTemplate) {
         this.authenticationManager = authenticationManager;
@@ -42,8 +47,9 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //获取表单提交数据
         try {
             UserPojo user = new ObjectMapper().readValue(request.getInputStream(), UserPojo.class);
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword(),
-                    new ArrayList<>()));
+            verifyCode = user.getVerifyCode();//后期可以优化成把验证码的校验放到自定义过滤器里面或者写一个自定义的类似UsernamePasswordAuthenticationToken的验证码校验类
+            uuid=user.getUuid();
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword(), new ArrayList<>()));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -58,6 +64,14 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //认证成功，得到认证成功之后用户信息
         //SecurityUser user = (SecurityUser)authResult.getPrincipal();//换下面
         UserPojo user = (UserPojo)authResult.getPrincipal();
+
+        //校验验证码
+        String code = redisTemplate.opsForValue().get(VERIFYCODE_PREFIX + uuid).toString();
+        System.err.println(code);
+        if(!verifyCode.equals(code)){
+            unsuccessfulAuthentication(request,response,new InsufficientAuthenticationException("验证码错误！"));
+        }
+
         //根据用户名生成token
         String token = tokenManager.createToken(user.getUsername());
         //把用户名称和用户权限列表放到redis
