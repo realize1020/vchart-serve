@@ -1,10 +1,23 @@
 server:
   port: 8080
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    threads:
+      # tomcat最大线程数，默认为200
+      max: 800
+      # Tomcat启动初始化的线程数
+      min-spare: 30
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 添加日志
   mapper-locations: classpath:mapper/*.xml
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 10MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/demo?characterEncoding=utf8&allowMultiQueries=true&useSSL=false&useUnicode=true&useOldAliasMetadataBehavior=true&serverTimezone=Asia/Shanghai
@@ -15,6 +28,10 @@ spring:
 #    host: localhost
 #    port: 6379
 #    database: 0
+
+# 上传文件存储路径
+prop:
+   upload-folder: D:/temp/uploadFiles
 
 rsa:
   key:

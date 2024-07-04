@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TFileInfoMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.TFileInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+    <result column="identifier" jdbcType="VARCHAR" property="identifier" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="total_size" jdbcType="DECIMAL" property="totalSize" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+    <result column="ref_project_id" jdbcType="VARCHAR" property="refProjectId" />
+    <result column="upload_by" jdbcType="VARCHAR" property="uploadBy" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, filename, identifier, type, total_size, location, del_flag, ref_project_id, upload_by, 
+    upload_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_file_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_file_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.TFileInfo">
+    insert into t_file_info (id, filename, identifier, 
+      type, total_size, location, 
+      del_flag, ref_project_id, upload_by, 
+      upload_time)
+    values (#{record.id,jdbcType=VARCHAR}, #{record.filename,jdbcType=VARCHAR}, #{record.identifier,jdbcType=VARCHAR},
+      #{record.type,jdbcType=VARCHAR}, #{record.totalSize,jdbcType=DECIMAL}, #{record.location,jdbcType=VARCHAR},
+      #{record.delFlag,jdbcType=VARCHAR}, #{record.refProjectId,jdbcType=VARCHAR}, #{record.uploadBy,jdbcType=VARCHAR},
+      #{record.uploadTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.TFileInfo">
+    insert into t_file_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="record.id != null">
+        id,
+      </if>
+      <if test="record.filename != null">
+        filename,
+      </if>
+      <if test="record.identifier != null">
+        identifier,
+      </if>
+      <if test="record.type != null">
+        type,
+      </if>
+      <if test="record.totalSize != null">
+        total_size,
+      </if>
+      <if test="record.location != null">
+        location,
+      </if>
+      <if test="record.delFlag != null">
+        del_flag,
+      </if>
+      <if test="record.refProjectId != null">
+        ref_project_id,
+      </if>
+      <if test="record.uploadBy != null">
+        upload_by,
+      </if>
+      <if test="record.uploadTime != null">
+        upload_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="record.id != null">
+        #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filename != null">
+        #{record.filename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identifier != null">
+        #{record.identifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalSize != null">
+        #{record.totalSize,jdbcType=DECIMAL},
+      </if>
+      <if test="record.location != null">
+        #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null">
+        #{record.delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refProjectId != null">
+        #{record.refProjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uploadBy != null">
+        #{record.uploadBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uploadTime != null">
+        #{record.uploadTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.TFileInfo">
+    update t_file_info
+    <set>
+      <if test="record.filename != null">
+        filename = #{record.filename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identifier != null">
+        identifier = #{record.identifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalSize != null">
+        total_size = #{record.totalSize,jdbcType=DECIMAL},
+      </if>
+      <if test="record.location != null">
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refProjectId != null">
+        ref_project_id = #{record.refProjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uploadBy != null">
+        upload_by = #{record.uploadBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uploadTime != null">
+        upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{record.id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.TFileInfo">
+    update t_file_info
+    set filename = #{record.filename,jdbcType=VARCHAR},
+      identifier = #{record.identifier,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      total_size = #{record.totalSize,jdbcType=DECIMAL},
+      location = #{record.location,jdbcType=VARCHAR},
+      del_flag = #{record.delFlag,jdbcType=VARCHAR},
+      ref_project_id = #{record.refProjectId,jdbcType=VARCHAR},
+      upload_by = #{record.uploadBy,jdbcType=VARCHAR},
+      upload_time = #{record.uploadTime,jdbcType=TIMESTAMP}
+    where id = #{record.id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectFileByParams" parameterType="com.example.demo.entity.TFileInfo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_file_info
+    where filename = #{record.filename,jdbcType=VARCHAR}
+      and identifier = #{record.identifier,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectFileList" resultMap="BaseResultMap" parameterType="com.example.demo.entity.QueryInfo">
+		SELECT
+			id ,
+			total_size,
+			filename ,
+			location,
+			identifier,
+			date_format(upload_time,'%Y-%m-%d-%T') AS uploadTimeString
+		FROM T_FILE_INFO
+		WHERE del_flag = '0'
+		<if test="record.nameSearch != null">
+      and filename like "%"#{record.nameSearch,jdbcType=VARCHAR}"%"
+    </if>
+		ORDER BY UPLOAD_TIME
+	</select>
+  
+</mapper>

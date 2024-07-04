@@ -50,11 +50,16 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/code/verifyCode").permitAll()
+                .antMatchers("/uploader/**").permitAll()
+                .antMatchers("/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")//退出路径
                 .addLogoutHandler(new TokenLogoutHandler(tokenManager)).and()
                 .addFilter(new TokenLoginFilter(authenticationManager(),tokenManager,redisTemplate))
                 .addFilter(new TokenAuthFilter(authenticationManager(), tokenManager)).httpBasic();
+
+
+        http.headers().frameOptions().sameOrigin();
     }
 
     //调用userDetailsService和密码处理
