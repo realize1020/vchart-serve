@@ -30,9 +30,9 @@ public class UserPojo implements UserDetails {
 
     private String nickName;
 
-    private String salt;
+    private String salt; //没什么用
 
-    private String token;
+    private String token;//没什么用
 
     //private Integer status;
 
